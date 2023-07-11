@@ -1,0 +1,59 @@
+---
+import NavBar from "@components/NavBar.astro";
+import TheHead from "@components/TheHead.astro";
+import NoiseFilter from "@components/NoiseFilter.astro";
+import TheFooter from "@components/TheFooter.astro";
+import "@/styles/index.scss";
+
+interface Props {
+  pageName: string;
+}
+
+let { pageName } = Astro.props;
+
+const title = pageName
+  ? `Luan Lima | ${pageName}`
+  : "Luan Lima | Portfólio";
+---
+
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <TheHead title={title} />
+    <script is:inline>
+      const theme = (() => {
+        if (
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("theme")
+        ) {
+          return localStorage.getItem("theme");
+        }
+        if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+          return "light";
+        }
+        return "dark";
+      })();
+
+      if (theme === "dark") {
+        document.documentElement.classList.remove("light");
+      } else {
+        document.documentElement.classList.add("light");
+      }
+
+      window.localStorage.setItem("theme", theme);
+    </script>
+  </head>
+  <body>
+    <!-- 
+https://github.com/DevLuanLima/devLuanLima-portfolio
+-->
+    <NoiseFilter />
+    <NavBar />
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <TheFooter />
+    </footer>
+  </body>
+</html>
